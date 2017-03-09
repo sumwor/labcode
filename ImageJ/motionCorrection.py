@@ -13,8 +13,8 @@ Argument = getArgument()
 Argument_list = Argument.split(',')
 dir_path = Argument_list[0]
 loop = Argument_list[1]
-print dir_path
-print loop
+print "dir_path",dir_path
+print "loop",loop
 #prepare the reference image
 #dir_path = "/Users/phoenix/Documents/Kwanlab/dataanalysis/discrimination/161013_try/"
 #find the path of the reference image (the first one in this case)
@@ -35,7 +35,7 @@ print loop
 #use the stitched raw file as the reference file
 ImgPath = ''
 root_path = dir_path + 'stitched' + loop
-print root_path
+print "root_path",root_path
 list_files = os.walk(root_path)
 for root, directory, files in list_files:
     for f in files:
@@ -44,7 +44,7 @@ for root, directory, files in list_files:
             ImgPath += path
             break
 
-print ImgPath
+print "ImgPath",ImgPath
 
 
 
@@ -57,7 +57,7 @@ IJ.run("Save", "save=["+dir_path+"refFrame"+loop+".tif]")
 IJ.run(ave_imp,"Close","")  #close all the files and open the reference file in the batchTurboReg_forPy.ijm file
 
 #run the ijm (modified to a little to suit the python code
-macroFileDir = "/Users/phoenix/Documents/Kwanlab/dataanalysis/batchTurboReg_forPy.ijm"
+macroFileDir = "F:\kwan\labcode\ImageJ\\batchTurboReg_forPy.ijm"
 IJ.runMacroFile(macroFileDir, Argument)
 
 #add a line to save the record

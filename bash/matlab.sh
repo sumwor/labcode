@@ -5,15 +5,7 @@
 dataDir="/Users/phoenix/Documents/Kwanlab/learning/746/test/"
 #this path should be find automatically at around 12 am everyday and run the following analysis
 
-#make raw;registered;stitch folder and move the raw data into raw folder
-cd $dataDir
-mkdir raw
-mkdir registered0
-for file in ./*.tif
-do
-  cp $file raw
-  mv $file registered0
-done
+
 #mkdir registered
 #mkdir stitched
 
@@ -26,9 +18,21 @@ matlabWorkingPath="/Users/phoenix/Documents/Kwanlab/dataanalysis"
 IJPath="/Applications/Fiji.app/Contents/MacOS/ImageJ-macosx"
 JythonPath="/Users/phoenix/Documents/Kwanlab/imageJ/motionCorrection.py"
 
+iterationTimes=4
+
+#make raw;registered;stitch folder and move the raw data into raw folder
+cd $dataDir
+mkdir raw
+mkdir registered0
+for file in ./*.tif
+do
+  cp $file raw
+  mv $file registered0
+done
+
 
 i=0
-while ((i<4))
+while ((i<$iterationTimes))
     do
     let j=i+1
     mkdir registered$j

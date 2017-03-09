@@ -11,8 +11,6 @@ loop_number = loop
 tic;
 
 %add the script path
-p = genpath('scripts')
-addpath(p)
 
 
 %load the parameter files
