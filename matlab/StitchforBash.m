@@ -42,32 +42,6 @@ end
 
 %% create directory structure for loading and saving files
 
-%default values
-%default_scim_ver = '3';
-%default_data_dir = '/Users/alexkwan/Desktop/image analysis/testgalvo/';
-% default_scim_ver = '5';
-% default_data_dir = '/Users/alexkwan/Desktop/image analysis/testresonant/';
-% default_raw_subdir = 'raw';
-% default_image_subdir = 'registered';
-% default_save_subdir = 'stitched';
-% default_batchLen = '1000';
-% default_dsFreq = '0.5';
-
-%ask user
-% prompt = {'ScanImage verison (3 or 5):','Root directory:','Subdirectory with raw images:','Subdirectory with registered images:','Subdirectory for saving stitched imaged:',...
-%     'Upper limit on #tiff files to be combined into 1 stitched file:','Downsample to approximately (Hz):'};
-% dlg_title = 'Downsample and stitch';
-% num_lines = 1;
-% defaultans = {default_scim_ver,default_data_dir,default_raw_subdir,default_image_subdir,default_save_subdir,...
-%     default_batchLen,default_dsFreq};
-% answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
-% scim_ver=str2double(answer{1});
-% data_dir=answer{2};
-% raw_subdir=answer{3};
-% image_subdir=answer{4};
-% save_subdir=answer{5};
-% batchLen=str2double(answer{6});
-% dsFreq=str2double(answer{7});
 
 % create directories
 if exist(data_dir,'dir')==7   %if it is a directory
@@ -135,6 +109,14 @@ for n=1:numel(stacks)
 
 end
 
+%order the files based on acquisition time
+%%this is not always neccessary for small dataset, but when tiff files exceed 1000
+%%it is needed to stitch the files in correct order
+[trigTime,index] = sort(trigTime);
+trigTime = trigTime(index);
+trigDelay = trigDelay(index);
+stacks = stacks(index);
+
 %% stitch tiff
 disp('----Processing images...');
 j=1;    %stitched image file count
@@ -150,7 +132,6 @@ end
 
 cd(data_dir);
 cd(image_subdir);
-stacks=dir('*.tif');
 
 for n=1:numel(stacks)
     img_fileID = stacks(n).name;

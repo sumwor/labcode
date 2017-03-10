@@ -1,7 +1,7 @@
 clear all;
 tic;
 refFrame='/Users/phoenix/Documents/Kwanlab/learning/746/746_02_26/raw_stitched/746_02_26__images_1-501_dsRatio_4.tif';
-
+EveryFrame= 0 ;
 %% load directory
 image_subdir = 'raw';
 %save_subdir = 'raw_green';
