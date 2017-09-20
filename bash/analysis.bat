@@ -9,7 +9,6 @@ rem dataDir: path of raw data (tif files)
 set dataDir=F:\kwan\learning\\test\
 rem these paths should better be in the same disk since batch cannot cd to another disk directly
 set stitchFile="StitchforBash"
-set matlabWorkingPath="F:\kwan\labcode\matlab"
 set IJPath="F:\Fiji.app\ImageJ-win64.exe"
 set JythonPath="F:\kwan\labcode\ImageJ\motionCorrection.py"
 
