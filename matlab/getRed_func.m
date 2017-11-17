@@ -1,11 +1,13 @@
 function getRed_func(filepath)
+
 tic;
-batchLen=1000;   %every x trials, combine into 1 tiff
+
+%batchLen=1000;   %every x trials, combine into 1 tiff
 
 %% load directory
 image_subdir = 'raw';
-save_subdir = 'stitched_redChan';
-
+save_subdir = 'raw_red';
+data_dir = filepath
 %data_dir = uigetdir('C:\Desktop\Image Analysis', 'Choose Data Directory');
 cd(data_dir);
 mkdir(save_subdir);
@@ -20,7 +22,13 @@ for n=1:numel(stacks)
     
     warning('off','all');   %scim_openTif generates warning
     [header]=scim_openTif(img_fileID);
+
+    
+    %get the header string
+    hTif = Tiff(img_fileID);
+    headerString  = hTif.getTag('ImageDescription');
     warning('on','all');
+    
     
     idx=find(header.internal.triggerTimeString=='/');
         if strcmp(header.internal.triggerTimeString(idx(2)-2),'/')
@@ -37,7 +45,6 @@ end
 
 frameRate=header.acq.frameRate;
 num_chans=header.acq.numberOfChannelsSave;
-redChan=num_chans-1;
 
 if ~isempty (header.acq.nextTrigInputTerminal)
     nextTrigMode=1;     %acquired using nextTrigger
@@ -61,6 +68,7 @@ for n=1:numel(stacks)
     info = imfinfo(img_fileID);
     stack_frames(n) = length(info);
     
+    tagstruct.ImageDescription=headerString;
     tagstruct.ImageLength=info(1).Height;
     tagstruct.ImageWidth=info(1).Width;
     tagstruct.Photometric = Tiff.Photometric.MinIsBlack;
@@ -72,7 +80,7 @@ for n=1:numel(stacks)
     
 %     if mod(n,batchLen)==1    %for every x trials, start a new .tiff file
 %         if (n+batchLen-1) <= numel(stacks)  %if end of stack, use the final trial as savefile-name
-%             savFile_name{j}=[FileName(1:end-3) '_trials_' int2str(n) '-' int2str(n+batchLen-1) 'red' ext];
+    savFile_name=[FileName(1:end) '-red' ext];
 %         else
 %             savFile_name{j}=[FileName(1:end-3) '_trials_' int2str(n) '-' int2str(numel(stacks)) 'red' ext]; 
 %         end
@@ -83,10 +91,10 @@ for n=1:numel(stacks)
     cd(save_subdir);
     t = Tiff(img_fileID,'w');
         
+    
     cd(data_dir);
-    cd(image_subdir);
-                                                               
-    curr_frame = imread(img_fileID, 'Index', redChan, 'Info', info); %last chan (chan2) is GCaMP channel; redChan:chan1
+    cd(image_subdir);                                                            
+    curr_frame = imread(img_fileID, 'Index', num_chans, 'Info', info); %last chan (chan2) is GCaMP channel; redChan:chan1
   
     t.setTag(tagstruct);
     t.write(curr_frame); %write first frame
@@ -111,10 +119,11 @@ nX=info(1).Width;
 nY=info(1).Height;
 
 num_frames=stack_frames/num_chans;
-
-%% save header info
 cd(data_dir);
 cd(save_subdir);
+
+%% save header info
+
 %save('stackinfo.mat','frameRate','nextTrigMode','trigTime','trigDelay','num_frames','stacks','batchLen','savFile_name','nX','nY');
 toc
 
