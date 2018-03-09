@@ -5,8 +5,8 @@ tic;
 %batchLen=1000;   %every x trials, combine into 1 tiff
 
 %% load directory
-image_subdir = 'raw';
-save_subdir = 'raw_green';
+image_subdir = 'raw2';
+save_subdir = 'raw_green2';
 data_dir = filepath
 %data_dir = uigetdir('C:\Desktop\Image Analysis', 'Choose Data Directory');
 cd(data_dir);
@@ -14,7 +14,7 @@ mkdir(save_subdir);
         
 cd(image_subdir);
 stacks=dir('*.tif');
-
+headerStringList=cell(1,numel(stacks));
 %% check acquisition time
 disp('----Acquiring header information from the images...');
 for n=1:numel(stacks)
@@ -28,7 +28,7 @@ for n=1:numel(stacks)
     hTif = Tiff(img_fileID);
     headerString  = hTif.getTag('ImageDescription');
     warning('on','all');
-    
+    headerStringList{n}=headerString;
     
     idx=find(header.internal.triggerTimeString=='/');
         if strcmp(header.internal.triggerTimeString(idx(2)-2),'/')
@@ -68,7 +68,7 @@ for n=1:numel(stacks)
     info = imfinfo(img_fileID);
     stack_frames(n) = length(info);
     
-    tagstruct.ImageDescription=headerString;
+    tagstruct.ImageDescription=headerStringList{n};
     tagstruct.ImageLength=info(1).Height;
     tagstruct.ImageWidth=info(1).Width;
     tagstruct.Photometric = Tiff.Photometric.MinIsBlack;

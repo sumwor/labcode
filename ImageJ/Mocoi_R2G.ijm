@@ -10,7 +10,7 @@ max_rep = 10;		// threshold for considering only max_error for repeat
 
 
 // Define Directories
-root_dir = "F:\\Raw Data from Variable Reward Task (MJS for HW)\\";
+root_dir = "E:\\MJData\\";
 //root_dir = "C:\\Users\\Michael\\Desktop\\Analysis\\for mocoMacro\\test\\";
 
 //root_dir = getDirectory("Choose a Directory");
@@ -24,8 +24,8 @@ for (i=0; i<data_dir.length; i++){
 	//data_dir[i]=replace(data_dir[i],"/","\"");
 	data_dir[i]=data_dir[i]+"\\";
 	//print("data_dir"+data_dir[i]);
-	redpath = root_dir+data_dir[i]+"stitched_redChan"+fs;
-	greenpath = root_dir+data_dir[i]+"stitched"+fs;
+	redpath = root_dir+data_dir[i]+"stitchedRed"+fs;
+	greenpath = root_dir+data_dir[i]+"stitchedGreen"+fs;
 	results_path = root_dir+data_dir[i]+"moco results"+fs;
 	reg_path =  root_dir+data_dir[i]+"registered"+fs;
 
